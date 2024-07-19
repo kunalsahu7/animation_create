@@ -30,33 +30,34 @@ class BoxAnimationView extends StatefulWidget {
 
 class _BoxAnimationViewState extends State<BoxAnimationView> with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  late Animation<double> animation;
+  late Animation<double> animation1;
+  late Animation<double> animation2;
 
   @override
   void initState() {
-    setAnimation();
+    setAnimation1();
     super.initState();
   }
 
-  void setAnimation() {
+  void setAnimation1() {
     controller = AnimationController(
+      duration: const Duration(seconds: 3),
       vsync: this,
-      duration: Duration(
-        seconds: 2,
+    );
+
+    animation1 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.0, 1),
       ),
     );
-    animation = controller
-      ..addListener(() => setState(() {}))
-      ..addStatusListener(
-        (status) {
-          if (status == AnimationStatus.completed) {
-            controller.reset();
-          } else if (status == AnimationStatus.dismissed) {
-            controller.forward();
-          }
-        },
-      );
-    controller.forward();
+
+    animation2 = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(1, 2),
+      ),
+    );
   }
 
   @override
@@ -78,11 +79,22 @@ class _BoxAnimationViewState extends State<BoxAnimationView> with SingleTickerPr
         child: Column(
           children: [
             widget.isTopText ? TextAnimationView(style: widget.style, text: widget.text) : const SizedBox.shrink(),
-            widget.isTopText ? const SizedBox(height: 50) : const SizedBox.shrink(),
+            widget.isTopText
+                ? InkWell(
+                    onTap: widget.onTapForBox,
+                    child: AnimatedBuilder(
+                      animation: animation1,
+                      builder: (context, child) => CustomPaint(
+                        painter: LinePainter(borderColor: widget.borderColor, animationValue: controller.value),
+                        child: Container(height: 50),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
             InkWell(
               onTap: widget.onTapForBox,
               child: AnimatedBuilder(
-                animation: animation,
+                animation: animation2,
                 builder: (context, child) {
                   return CustomPaint(
                     foregroundPainter: BorderPainter(controller.value, borderColor: widget.borderColor),
@@ -99,7 +111,18 @@ class _BoxAnimationViewState extends State<BoxAnimationView> with SingleTickerPr
                 },
               ),
             ),
-            !widget.isTopText ? const SizedBox(height: 50) : const SizedBox.shrink(),
+            !widget.isTopText
+                ? InkWell(
+                    onTap: widget.onTapForBox,
+                    child: AnimatedBuilder(
+                      animation: animation1,
+                      builder: (context, child) => CustomPaint(
+                        painter: LinePainter(borderColor: widget.borderColor, animationValue: controller.value),
+                        child: Container(height: 50),
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
             !widget.isTopText ? TextAnimationView(style: widget.style, text: widget.text) : const SizedBox.shrink(),
           ],
         ),

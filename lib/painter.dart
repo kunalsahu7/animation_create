@@ -62,3 +62,35 @@ class BorderPainter extends CustomPainter {
   @override
   bool shouldRebuildSemantics(BorderPainter oldDelegate) => false;
 }
+
+class LinePainter extends CustomPainter {
+  final Color borderColor;
+  final double animationValue; // Value from 0.0 to 1.0
+
+  LinePainter({required this.borderColor, required this.animationValue});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = borderColor
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.fill;
+
+    // Draw the vertical line
+    canvas.drawLine(Offset(size.width / 2, 0), Offset(size.width / 2, size.height * animationValue), paint);
+
+    // Draw the circle at the top
+    canvas.drawCircle(Offset(size.width / 2, 0), 8.0, paint);
+
+    // Draw the circle at the bottom only if animation is complete
+    print("=========${animationValue <= 0.8}");
+    if (animationValue >= 0.88) {
+      canvas.drawCircle(Offset(size.width / 2, size.height), 8, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
