@@ -7,7 +7,8 @@ class AnimatedLineAndBorder extends StatefulWidget {
   _AnimatedLineAndBorderState createState() => _AnimatedLineAndBorderState();
 }
 
-class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder> with SingleTickerProviderStateMixin {
+class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _lineAnimation;
   late Animation<double> _borderAnimation;
@@ -67,7 +68,9 @@ class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder> with Sing
               child: AnimatedBuilder(
                 animation: _borderAnimation,
                 builder: (context, child) {
-                  return CustomPaint(painter: BoxPainter(_borderAnimation.value));
+                  return CustomPaint(
+                    painter: BoxPainter(),
+                  );
                 },
               ),
             ),
@@ -91,7 +94,8 @@ class LinePainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..style = PaintingStyle.fill;
 
-    canvas.drawLine(Offset(size.width / 2, 0), Offset(size.width / 2, size.height * animationValue), paint);
+    canvas.drawLine(Offset(size.width / 2, 0),
+        Offset(size.width / 2, size.height * animationValue), paint);
     canvas.drawCircle(Offset(size.width / 2, 0), 8.0, paint);
     if (animationValue >= 0.88) {
       canvas.drawCircle(Offset(size.width / 2, size.height), 8, paint);
@@ -105,26 +109,22 @@ class LinePainter extends CustomPainter {
 }
 
 class BoxPainter extends CustomPainter {
-  final double animationValue;
-
-  BoxPainter(this.animationValue);
-
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
-    paint.color = Colors.blue;
+    paint.color = Colors.black;
     var leftSidePath = Path();
-    leftSidePath.moveTo(0, 0);
-    leftSidePath.lineTo(size.width / 2, 0);
-    leftSidePath.lineTo(size.width / 2, size.height);
+    leftSidePath.lineTo(size.width, 0);
+    leftSidePath.lineTo(size.width, size.height);
     leftSidePath.lineTo(0, size.height);
     leftSidePath.lineTo(0, 0);
+    leftSidePath.lineTo(0, size.height);
     canvas.drawPath(leftSidePath, paint);
 
-    paint.color = Colors.red;
+    paint.color = Colors.black;
     var rightSidePath = Path();
     rightSidePath.moveTo(size.width / 2, 0);
     rightSidePath.lineTo(size.width, 0);
@@ -170,7 +170,8 @@ class BorderPainter extends CustomPainter {
       path.moveTo(0, 0);
       path.lineTo(size.width, 0);
       path.lineTo(size.width, size.height);
-      path.lineTo(size.width - (progress - size.width - size.height), size.height);
+      path.lineTo(
+          size.width - (progress - size.width - size.height), size.height);
     } else if (progress <= perimeter) {
       path.moveTo(0, 0);
       path.lineTo(size.width, 0);
