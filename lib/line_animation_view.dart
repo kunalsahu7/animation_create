@@ -1,5 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AnimatedLineAndBorder extends StatefulWidget {
@@ -62,16 +64,19 @@ class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder>
                 },
               ),
             ),
-            SizedBox(
-              width: 200,
-              height: 200,
-              child: AnimatedBuilder(
-                animation: _borderAnimation,
-                builder: (context, child) {
-                  return CustomPaint(
-                    painter: BoxPainter(),
-                  );
-                },
+            Transform.rotate(
+              angle: pi / 2,
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: AnimatedBuilder(
+                  animation: _borderAnimation,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: BoxPainter(animation: _borderAnimation.value),
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -109,6 +114,10 @@ class LinePainter extends CustomPainter {
 }
 
 class BoxPainter extends CustomPainter {
+  final double animation;
+
+  BoxPainter({required this.animation});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -117,20 +126,20 @@ class BoxPainter extends CustomPainter {
 
     paint.color = Colors.black;
     var leftSidePath = Path();
-    leftSidePath.lineTo(size.width, 0);
-    leftSidePath.lineTo(size.width, size.height);
+    leftSidePath.lineTo((size.width * animation), 0);
+    leftSidePath.lineTo((size.width * animation), size.height);
     leftSidePath.lineTo(0, size.height);
     leftSidePath.lineTo(0, 0);
     leftSidePath.lineTo(0, size.height);
     canvas.drawPath(leftSidePath, paint);
 
-    paint.color = Colors.black;
-    var rightSidePath = Path();
-    rightSidePath.moveTo(size.width / 2, 0);
-    rightSidePath.lineTo(size.width, 0);
-    rightSidePath.lineTo(size.width, size.height);
-    rightSidePath.lineTo(size.width / 2, size.height);
-    canvas.drawPath(rightSidePath, paint);
+    // paint.color = Colors.black;
+    // var rightSidePath = Path();
+    // rightSidePath.moveTo(size.width / 2, 0);
+    // rightSidePath.lineTo(size.width, 0);
+    // rightSidePath.lineTo(size.width, size.height);
+    // rightSidePath.lineTo(size.width / 2, size.height);
+    // canvas.drawPath(rightSidePath, paint);
   }
 
   @override
