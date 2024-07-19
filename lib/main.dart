@@ -1,147 +1,99 @@
+// ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers
+
+import 'package:animation_create/box_animation_view.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Border Animation')),
-        body: const HomeScreen(),
-      ),
+      title: 'Border Animation',
+      home: HomePage(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  bool isAnimationShow = false;
+class HomePageState extends State<HomePage> {
+  bool isAnimation1Show = false;
+  bool isAnimation2Show = false;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Stack(
-          children: [
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  isAnimationShow = true;
-                  setState(() {});
-                },
-                child: Text("Click"),
-              ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          Center(
+            child: ElevatedButton(
+              onPressed: () => setState(() => isAnimation1Show = !isAnimation1Show),
+              child: Text("Show Animation"),
             ),
-            isAnimationShow ? const BorderAnimationWidget(borderColor: Colors.amber) : const SizedBox.shrink(),
-          ],
-        ),
+          ),
+          Positioned(
+            top: 600,
+            left: 110,
+            child: Container(
+              color: Colors.transparent,
+              width: 200,
+              height: 200,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Image.network("https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
+            ),
+          ),
+          Positioned(
+            top: 50,
+            left: 110,
+            child: Container(
+              color: Colors.transparent,
+              width: 200,
+              height: 200,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Image.network("https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
+            ),
+          ),
+          isAnimation1Show
+              ? BoxAnimationView(
+                  borderColor: Colors.lightBlue.shade900,
+                  onTapForBarier: () => setState(() => isAnimation1Show = false),
+                  onTapForBox: () {
+                    isAnimation2Show = true;
+                    isAnimation1Show = false;
+                    setState(() {});
+                  },
+                  style: TextStyle(color: Colors.lightBlue.shade900, fontSize: 15, fontWeight: FontWeight.bold),
+                  xPos: 110,
+                  yPos: 600 - 70,
+                  text: "Tap on",
+                )
+              : const SizedBox.shrink(),
+          isAnimation2Show
+              ? BoxAnimationView(
+                  borderColor: Colors.lightBlue.shade900,
+                  onTapForBarier: () => setState(() => isAnimation2Show = false),
+                  onTapForBox: () {
+                    isAnimation2Show = false;
+                    setState(() {});
+                  },
+                  style: TextStyle(color: Colors.lightBlue.shade900, fontSize: 15, fontWeight: FontWeight.bold),
+                  xPos: 110,
+                  yPos: 50,
+                  text: "Tap on",
+                  isTopText: false,
+                )
+              : const SizedBox.shrink(),
+        ],
       ),
     );
-  }
-}
-
-class BorderAnimationWidget extends StatefulWidget {
-  final Color borderColor;
-  const BorderAnimationWidget({super.key, required this.borderColor});
-
-  @override
-  BorderAnimationWidgetState createState() => BorderAnimationWidgetState();
-}
-
-class BorderAnimationWidgetState extends State<BorderAnimationWidget> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    );
-
-    _animation = Tween<double>(begin: 0, end: 1200).animate(_controller)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: CustomPaint(
-        painter: BorderPainter(
-          _animation.value,
-          borderColor: widget.borderColor,
-        ),
-        child: Container(
-          width: 300,
-          height: 300,
-        ),
-      ),
-    );
-  }
-}
-
-class BorderPainter extends CustomPainter {
-  final double animationValue;
-  final Color borderColor;
-
-  BorderPainter(this.animationValue, {required this.borderColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = borderColor
-      ..strokeWidth = 4.0
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-    double perimeter = 2 * (size.width + size.height);
-
-    if (animationValue <= size.width) {
-      path.moveTo(0, 0);
-      path.lineTo(animationValue, 0);
-    } else if (animationValue <= size.width + size.height) {
-      path.moveTo(0, 0);
-      path.lineTo(size.width, 0);
-      path.lineTo(size.width, animationValue - size.width);
-    } else if (animationValue <= 2 * size.width + size.height) {
-      path.moveTo(0, 0);
-      path.lineTo(size.width, 0);
-      path.lineTo(size.width, size.height);
-      path.lineTo(size.width - (animationValue - size.width - size.height), size.height);
-    } else if (animationValue <= perimeter) {
-      path.moveTo(0, 0);
-      path.lineTo(size.width, 0);
-      path.lineTo(size.width, size.height);
-      path.lineTo(0, size.height);
-      path.lineTo(0, size.height - (animationValue - 2 * size.width - size.height));
-    }
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
