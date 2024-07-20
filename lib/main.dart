@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
-import 'package:animation_create/box_animation_view.dart'; 
+import 'package:animation_create/box_animation_view.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -76,9 +76,10 @@ class HomePageState extends State<HomePage> {
                     setState(() {});
                   },
                   style: TextStyle(
-                      color: Colors.lightBlue.shade900,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.lightBlue.shade900,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                   xPos: 110,
                   yPos: 600 - 85,
                   text: "Tap on",
@@ -94,9 +95,10 @@ class HomePageState extends State<HomePage> {
                     setState(() {});
                   },
                   style: TextStyle(
-                      color: Colors.lightBlue.shade900,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.lightBlue.shade900,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                   xPos: 110,
                   yPos: 50,
                   text: "Tap on",
