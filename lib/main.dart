@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
-import 'package:animation_create/box_animation_view.dart';
-import 'package:animation_create/line_animation_view.dart';
+import 'package:animation_create/box_animation_view.dart'; 
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Border Animation',
-      home: 1 == 1 ? AnimatedLineAndBorder() : HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -37,7 +36,8 @@ class HomePageState extends State<HomePage> {
         children: [
           Center(
             child: ElevatedButton(
-              onPressed: () => setState(() => isAnimation1Show = !isAnimation1Show),
+              onPressed: () =>
+                  setState(() => isAnimation1Show = !isAnimation1Show),
               child: Text("Show Animation"),
             ),
           ),
@@ -49,7 +49,8 @@ class HomePageState extends State<HomePage> {
               width: 200,
               height: 200,
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Image.network("https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
+              child: Image.network(
+                  "https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
             ),
           ),
           Positioned(
@@ -60,33 +61,42 @@ class HomePageState extends State<HomePage> {
               width: 200,
               height: 200,
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Image.network("https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
+              child: Image.network(
+                  "https://oceanmtech.b-cdn.net/dmt/data_file/20240619173057-bzwax9.jpg"),
             ),
           ),
           isAnimation1Show
               ? BoxAnimationView(
                   borderColor: Colors.lightBlue.shade900,
-                  onTapForBarier: () => setState(() => isAnimation1Show = false),
+                  onTapForBarier: () =>
+                      setState(() => isAnimation1Show = false),
                   onTapForBox: () {
                     isAnimation2Show = true;
                     isAnimation1Show = false;
                     setState(() {});
                   },
-                  style: TextStyle(color: Colors.lightBlue.shade900, fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.lightBlue.shade900,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
                   xPos: 110,
-                  yPos: 600 - 70,
+                  yPos: 600 - 85,
                   text: "Tap on",
                 )
               : const SizedBox.shrink(),
           isAnimation2Show
               ? BoxAnimationView(
                   borderColor: Colors.lightBlue.shade900,
-                  onTapForBarier: () => setState(() => isAnimation2Show = false),
+                  onTapForBarier: () =>
+                      setState(() => isAnimation2Show = false),
                   onTapForBox: () {
                     isAnimation2Show = false;
                     setState(() {});
                   },
-                  style: TextStyle(color: Colors.lightBlue.shade900, fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.lightBlue.shade900,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
                   xPos: 110,
                   yPos: 50,
                   text: "Tap on",

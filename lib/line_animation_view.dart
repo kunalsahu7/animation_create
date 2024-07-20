@@ -24,10 +24,7 @@ class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder>
     );
 
     _lineAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _controller,
-        curve: Interval(0.0, 0.5),
-      ),
+      CurvedAnimation(parent: _controller, curve: Interval(0.0, 0.5)),
     );
 
     _borderAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -57,7 +54,7 @@ class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder>
                 builder: (context, child) {
                   return CustomPaint(
                     painter: LinePainter(
-                      borderColor: Colors.blue,
+                      borderColor: Colors.amber,
                       animationValue: _lineAnimation.value,
                     ),
                   );
@@ -73,7 +70,12 @@ class _AnimatedLineAndBorderState extends State<AnimatedLineAndBorder>
                   animation: _borderAnimation,
                   builder: (context, child) {
                     return CustomPaint(
-                      painter: BoxPainter(animation: _borderAnimation.value),
+                      painter: BoxPainter(
+                        animation: _borderAnimation.value,
+                        borderColor: _lineAnimation.value == 1
+                            ? Colors.amber
+                            : Colors.transparent,
+                      ),
                     );
                   },
                 ),
@@ -115,8 +117,9 @@ class LinePainter extends CustomPainter {
 
 class BoxPainter extends CustomPainter {
   final double animation;
+  final Color borderColor;
 
-  BoxPainter({required this.animation});
+  BoxPainter({required this.animation, required this.borderColor});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -124,7 +127,7 @@ class BoxPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 3;
 
-    paint.color = Colors.black;
+    paint.color = borderColor;
     var leftSidePath = Path();
     leftSidePath.lineTo((size.width * animation), 0);
     leftSidePath.lineTo((size.width * animation), size.height);
